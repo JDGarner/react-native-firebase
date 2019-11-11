@@ -1,37 +1,56 @@
 {
-  "name": "react-native-firebase",
-  "private": true,
+  "name": "@react-native-firebase/app",
+  "version": "6.0.2",
+  "author": "Invertase <oss@invertase.io> (http://invertase.io)",
+  "description": "A well tested, feature rich Firebase implementation for React Native, supporting iOS & Android. Individual module support for Admob, Analytics, Auth, Crash Reporting, Cloud Firestore, Database, Dynamic Links, Functions, Messaging (FCM), Remote Config, Storage and more.",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "scripts": {
-    "prepare": "yarn run lerna:link && lerna run prepare",
-    "build:all:clean": "lerna run build:clean",
-    "build:all:build": "lerna run build",
-    "validate:all:js": "eslint ./",
-    "validate:all:ts": "tsc --project ./ && tslint --project tsconfig.json -c tslint.json packages/**/**/*.ts",
-    "validate:all:flow": "flow",
-    "lerna:bootstrap": "lerna bootstrap",
-    "lerna:link": "lerna link && lerna exec -- yarn link",
-    "lerna:clean": "lerna clean",
-    "gen:reference": "node scripts/generate-typedoc.js",
-    "tests:packager:chrome": "cd tests && node_modules/.bin/react-native start --platforms ios,android --reset-cache",
-    "tests:packager:jet": "cd tests && cross-env REACT_DEBUGGER=\"echo nope\" node_modules/.bin/react-native start",
-    "tests:packager:jet-reset-cache": "cd tests & cross-env REACT_DEBUGGER=\"echo nope\" node_modules/.bin/react-native start --reset-cache",
-    "tests:android:build": "cd tests && ./node_modules/.bin/detox build --configuration android.emu.debug",
-    "tests:android:build-release": "cd tests && ./node_modules/.bin/detox build --configuration android.emu.release",
-    "tests:android:test": "cd tests && ./node_modules/.bin/detox test --configuration android.emu.debug",
-    "tests:android:test-reuse": "cd tests && ./node_modules/.bin/detox test --configuration android.emu.debug --reuse",
-    "tests:android:test-cover": "cd tests && nyc ./node_modules/.bin/detox test --configuration android.emu.debug",
-    "tests:android:test-cover-reuse": "cd tests && nyc ./node_modules/.bin/detox test --configuration android.emu.debug --reuse",
-    "tests:ios:build": "cd tests && ./node_modules/.bin/detox build --configuration ios.sim.debug",
-    "tests:ios:build-release": "cd tests && ./node_modules/.bin/detox build --configuration ios.sim.release",
-    "tests:ios:test": "cd tests && ./node_modules/.bin/detox test --configuration ios.sim.debug --loglevel warn",
-    "tests:ios:test-reuse": "cd tests && ./node_modules/.bin/detox test --configuration ios.sim.debug --reuse --loglevel warn",
-    "tests:ios:test-cover": "cd tests && node_modules/.bin/nyc ./node_modules/.bin/detox test --configuration ios.sim.debug",
-    "tests:ios:test-cover-reuse": "cd tests && node_modules/.bin/nyc ./node_modules/.bin/detox test --configuration ios.sim.debug --reuse --loglevel warn",
-    "tests:ios:pod:install": "cd tests && cd ios && rm -rf ReactNativeFirebaseDemo.xcworkspace && pod install && cd ..",
-    "npm:version:release:patch": "echo '!!🔴!! RELEASE !!🔴!!' && lerna version patch --no-git-tag-version --no-push --exact --force-publish=*",
-    "npm:version:release:minor": "echo '!!🔴!! RELEASE !!🔴!!' && lerna version minor --no-git-tag-version --no-push --exact --force-publish=*",
-    "npm:version:release:major": "echo '!!🔴!! RELEASE !!🔴!!' && lerna version major --no-git-tag-version --no-push --exact --force-publish=*",
-    "npm:publish:release": "echo '!!🔴!! RELEASE !!🔴!!' && echo '!!!!! RELEASE !!!!!!' && lerna publish from-package --dist-tag latest --no-git-reset"
+    "build": "genversion --semi lib/version.js && node ./scripts/genversion-ios",
+    "build:clean": "rimraf android/build && rimraf ios/build",
+    "prepare": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/invertase/react-native-firebase/tree/master/packages/app"
+  },
+  "license": "Apache-2.0",
+  "keywords": [
+    "react",
+    "admob",
+    "auth",
+    "config",
+    "digits",
+    "fabric",
+    "functions",
+    "phone-auth",
+    "sms",
+    "firestore",
+    "cloud-firestore",
+    "datastore",
+    "remote-config",
+    "transactions",
+    "react-native",
+    "react-native-firebase",
+    "firebase",
+    "fcm",
+    "apn",
+    "gcm",
+    "analytics",
+    "messaging",
+    "database",
+    "android",
+    "ios",
+    "crash",
+    "firestack",
+    "performance",
+    "firestore",
+    "dynamic-links",
+    "crashlytics"
+  ],
+  "peerDependencies": {
+    "react": "*",
+    "react-native": "*"
   },
   "devDependencies": {
     "@babel/cli": "^7.5.5",
@@ -56,56 +75,17 @@
     "typedoc": "^0.15.0",
     "typescript": "^3.5.3"
   },
-  "lint-staged": {
-    "packages/**/*.js": [
-      "eslint --fix",
-      "git add"
-    ],
-    "tests/**/*.js": [
-      "eslint --fix",
-      "git add"
-    ],
-    "*.{json,md}": [
-      "prettier --write",
-      "git add"
-    ]
-  },
-  "workspaces": {
-    "packages": [
-      "packages/*",
-      "packages/template/project",
-      "tests"
-    ],
-    "nohoist": [
-      "packages/template/project/react-native", "packages/template/project/react-native/**",
-      "detox",
-      "**/detox",
-      "**/detox/**",
-      "**/react-native-port-patcher/**",
-      "**/prop-types/**",
-      "**/@react-native-firebase/private-tests-helpers",
-      "**/@react-native-firebase/private-tests-helpers/**",
-      "**/babel-plugin-istanbul",
-      "**/babel-plugin-istanbul/**",
-      "**/patch-package",
-      "**/patch-package/**",
-      "**/jet",
-      "**/jet/**",
-      "**/nyc",
-      "**/nyc/**",
-      "**/react",
-      "**/react/**",
-      "**/react-native",
-      "**/react-native/**",
-      "**/stacktrace-js",
-      "**/stacktrace-js/**",
-      "**/superstruct",
-      "**/superstruct/**"
-    ]
-  },
   "dependencies": {
-    "axios": "^0.19.0",
-    "inquirer": "^6.2.2",
-    "shelljs": "^0.8.3"
+    "@react-native-firebase/app-types": "6.0.2",
+    "opencollective-postinstall": "^2.0.1",
+    "superstruct": "^0.6.2"
+  },
+  "collective": {
+    "type": "opencollective",
+    "url": "https://opencollective.com/react-native-firebase"
+  },
+  "gitHead": "be543f49114fde96d67b62ca1514aa4e5e43b935",
+  "publishConfig": {
+    "access": "public"
   }
 }
